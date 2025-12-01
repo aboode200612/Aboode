@@ -9,7 +9,7 @@ const moviesData = [
     },
     {
         title: "John Wick 4",
-        image: "https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UPurM9p.jpg",
+        image: "https://share.google/MfYKPCfpufrCczVo5",
         year: "2023",
         rating: "7.9",
         category: "movie"
