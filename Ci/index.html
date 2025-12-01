@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سينما العراق | Cinema Iraq</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <h1><i class="fas fa-play-circle"></i> سينما العراق</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#" class="active">الرئيسية</a></li>
+            <li><a href="#">أفلام عالمية</a></li>
+            <li><a href="#">مسلسلات</a></li>
+            <li><a href="#">الأكثر مشاهدة</a></li>
+        </ul>
+        <div class="search-box">
+            <input type="text" placeholder="ابحث عن فيلم...">
+            <button><i class="fas fa-search"></i></button>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h2>Breaking Bad</h2>
+            <p>مدرس كيمياء يصاب بالسرطان ويتحول إلى عالم الجريمة لتأمين مستقبل عائلته. واحد من أفضل المسلسلات في التاريخ.</p>
+            <div class="hero-buttons">
+                <button class="btn-primary"><i class="fas fa-play"></i> مشاهدة الآن</button>
+                <button class="btn-secondary"><i class="fas fa-info-circle"></i> التفاصيل</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <section class="category">
+            <div class="section-header">
+                <h3><i class="fas fa-fire"></i> أحدث الأفلام العالمية</h3>
+            </div>
+            <div class="movie-grid" id="movies-container">
+                </div>
+        </section>
+
+        <section class="category">
+            <div class="section-header">
+                <h3><i class="fas fa-tv"></i> مسلسلات مقترحة</h3>
+            </div>
+            <div class="movie-grid" id="series-container">
+                </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; 2024 سينما العراق</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
