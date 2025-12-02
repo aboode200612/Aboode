@@ -17,6 +17,12 @@ const channels = [
         logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Bein_Sports_logo.svg/2048px-Bein_Sports_logo.svg.png",
         link: "", // ضع رابطك هنا
         category: "sport"
+    },
+    {
+        name: "SSC",
+        logo: "https://www.elahmad.com/tv/ssc-sport-live.php",
+        link: "https://www.elahmad.com/tv/live/shahid_shaka.php?id=ssc1",
+        category: "sport"
     }
 ];
 
