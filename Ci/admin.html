@@ -3,89 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم - مولد الأفلام</title>
+    <title>إدارة القنوات | 66 LIVE</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        body { background-color: #111; color: white; padding: 20px; }
-        .admin-box { max-width: 600px; margin: 50px auto; background: #222; padding: 30px; border-radius: 10px; border: 1px solid #333; }
-        h2 { text-align: center; color: var(--primary-color); margin-bottom: 20px; }
-        input, select { width: 100%; padding: 12px; margin-bottom: 15px; background: #333; border: 1px solid #444; color: white; border-radius: 5px; }
-        button { width: 100%; padding: 12px; background: var(--primary-color); color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        button:hover { background: #c40812; }
-        
-        /* منطقة الكود الناتج */
-        .result-area { margin-top: 20px; display: none; }
-        textarea { width: 100%; height: 150px; background: #000; color: #0f0; padding: 10px; border: 1px solid #333; direction: ltr; font-family: monospace; }
-        .copy-btn { background: #444; margin-top: 5px; }
-        .instruction { font-size: 0.9rem; color: #aaa; margin-bottom: 10px; }
+        body { background: #000; padding: 20px; }
+        .admin-box { background: #111; padding: 20px; border: 1px solid var(--neon-green); border-radius: 10px; max-width: 500px; margin: auto; }
+        input, select { width: 100%; background: #222; border: 1px solid #444; color: white; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
+        input:focus { border-color: var(--neon-green); outline: none; }
+        button { width: 100%; background: var(--neon-green); color: black; padding: 10px; border: none; font-weight: bold; cursor: pointer; }
+        h2 { text-align: center; color: var(--neon-green); margin-bottom: 20px; }
+        textarea { width: 100%; background: #000; color: var(--neon-green); border: 1px solid #333; height: 100px; margin-top: 10px; direction: ltr; }
     </style>
 </head>
 <body>
-
     <div class="admin-box">
-        <h2><i class="fas fa-cogs"></i> إضافة عمل جديد</h2>
-        
-        <label>اسم العمل (الفيلم/المسلسل)</label>
-        <input type="text" id="title" placeholder="مثال: Breaking Bad">
-
-        <label>رابط بوستر الصورة</label>
-        <input type="text" id="image" placeholder="https://...">
-
-        <label>سنة الإنتاج</label>
-        <input type="text" id="year" placeholder="2024">
-
-        <label>التقييم (من 10)</label>
-        <input type="text" id="rating" placeholder="8.5">
-
-        <label>التصنيف</label>
-        <select id="category">
-            <option value="movie">فيلم (Movie)</option>
-            <option value="series">مسلسل (Series)</option>
+        <h2>إضافة قناة جديدة</h2>
+        <input type="text" id="name" placeholder="اسم القناة">
+        <input type="text" id="logo" placeholder="رابط الشعار (صورة)">
+        <input type="text" id="link" placeholder="رابط البث (m3u8)">
+        <select id="cat">
+            <option value="sport">رياضة</option>
+            <option value="news">أخبار</option>
+            <option value="ent">ترفيه</option>
         </select>
-
-        <button onclick="generateCode()">توليد الكود</button>
-
-        <div class="result-area" id="resultArea">
-            <hr style="border-color: #333; margin: 20px 0;">
-            <p class="instruction">انسخ الكود أدناه وضعه داخل ملف <b>script.js</b> في بداية القائمة:</p>
-            <textarea id="outputCode"></textarea>
-            <button class="copy-btn" onclick="copyText()">نسخ الكود</button>
-        </div>
+        <button onclick="gen()">توليد الكود</button>
+        <textarea id="out"></textarea>
     </div>
 
     <script>
-        function generateCode() {
-            // جلب البيانات من الحقول
-            const title = document.getElementById('title').value;
-            const image = document.getElementById('image').value;
-            const year = document.getElementById('year').value;
-            const rating = document.getElementById('rating').value;
-            const category = document.getElementById('category').value;
+        function gen() {
+            const n = document.getElementById('name').value;
+            const l = document.getElementById('logo').value;
+            const u = document.getElementById('link').value;
+            const c = document.getElementById('cat').value;
 
-            if(!title || !image) {
-                alert('يرجى ملء الاسم والصورة على الأقل');
-                return;
-            }
-
-            // تصميم شكل الكود الناتج
             const code = `    {
-        title: "${title}",
-        image: "${image}",
-        year: "${year}",
-        rating: "${rating}",
-        category: "${category}"
+        name: "${n}",
+        logo: "${l}",
+        link: "${u}",
+        category: "${c}"
     },`;
-
-            // عرض النتيجة
-            document.getElementById('outputCode').value = code;
-            document.getElementById('resultArea').style.display = 'block';
-        }
-
-        function copyText() {
-            const copyText = document.getElementById("outputCode");
-            copyText.select();
-            document.execCommand("copy");
-            alert("تم نسخ الكود! الآن اذهب لملف script.js وألصقه.");
+            document.getElementById('out').value = code;
         }
     </script>
 </body>
