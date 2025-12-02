@@ -1,73 +1,86 @@
-// قاعدة بيانات وهمية للأفلام (يمكنك إضافة المزيد هنا)
-const moviesData = [
+// بيانات القنوات (أمثلة)
+const channels = [
     {
-        title: "Oppenheimer",
-        image: "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-        year: "2023",
-        rating: "8.6",
-        category: "movie"
+        name: "Al Jazeera",
+        logo: "https://upload.wikimedia.org/wikipedia/en/thumb/f/f2/Aljazeera_en.svg/1200px-Aljazeera_en.svg.png",
+        link: "https://live-hls-web-aje.getaj.net/AJE/03.m3u8",
+        category: "news"
     },
     {
-        title: "John Wick 4",
-        image: "https://share.google/MfYKPCfpufrCczVo5",
-        year: "2023",
-        rating: "7.9",
-        category: "movie"
+        name: "Spacetoon Go",
+        logo: "https://play-lh.googleusercontent.com/Fj5x-cZg8P6qO3-0W_Kqh-KqP5q0Zg4q0Zg4q0Zg4q0Zg4q0Zg4q0Zg4q0Zg4=w240-h480-rw",
+        link: "https://sttoon.fly.dev/index.m3u8", // رابط تجريبي
+        category: "ent"
     },
     {
-        title: "Game of Thrones",
-        image: "https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbGw83trZrcr5bb.jpg",
-        year: "2011",
-        rating: "9.3",
-        category: "series"
-    },
-    {
-        title: "Inception",
-        image: "https://image.tmdb.org/t/p/w500/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg",
-        year: "2010",
-        rating: "8.8",
-        category: "movie"
-    },
-    {
-        title: "Stranger Things",
-        image: "https://image.tmdb.org/t/p/w500/49WJfeN0moxb9IPfGn8AIqMGskD.jpg",
-        year: "2016",
-        rating: "8.7",
-        category: "series"
-    },
-    {
-        title: "The Batman",
-        image: "https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50x9TfdlnJR.jpg",
-        year: "2022",
-        rating: "7.7",
-        category: "movie"
+        name: "BeIN Sports (Example)",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Bein_Sports_logo.svg/2048px-Bein_Sports_logo.svg.png",
+        link: "", // ضع رابطك هنا
+        category: "sport"
     }
 ];
 
-// دالة لعرض الأفلام في الصفحة
-function displayMovies() {
-    const moviesContainer = document.getElementById('movies-container');
-    const seriesContainer = document.getElementById('series-container');
+// عرض القنوات
+function renderChannels(filter = 'all') {
+    const container = document.getElementById('channels-container');
+    container.innerHTML = '';
 
-    moviesData.forEach(item => {
-        const card = `
-            <div class="movie-card">
-                <img src="${item.image}" alt="${item.title}">
-                <div class="card-info">
-                    <h4>${item.title}</h4>
-                    <span>${item.year}</span>
-                    <div class="rating"><i class="fas fa-star"></i> ${item.rating}</div>
+    channels.forEach(channel => {
+        if (filter === 'all' || channel.category === filter) {
+            const card = `
+                <div class="channel-card" onclick="playChannel('${channel.link}')">
+                    <span class="live-badge">LIVE</span>
+                    <img src="${channel.logo}" alt="${channel.name}">
+                    <h3>${channel.name}</h3>
                 </div>
-            </div>
-        `;
-
-        if (item.category === 'movie') {
-            moviesContainer.innerHTML += card;
-        } else {
-            seriesContainer.innerHTML += card;
+            `;
+            container.innerHTML += card;
         }
     });
 }
 
-// تشغيل الدالة عند تحميل الصفحة
-document.addEventListener('DOMContentLoaded', displayMovies);
+// تشغيل القناة
+function playChannel(url) {
+    if (!url) {
+        alert("الرابط غير متوفر حالياً للقناة");
+        return;
+    }
+
+    const playerContainer = document.getElementById('player-container');
+    const video = document.getElementById('video');
+
+    playerContainer.classList.remove('hidden');
+
+    if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+            video.play();
+        });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+        video.addEventListener('loadedmetadata', function() {
+            video.play();
+        });
+    }
+}
+
+// إغلاق المشغل
+function closePlayer() {
+    const playerContainer = document.getElementById('player-container');
+    const video = document.getElementById('video');
+    video.pause();
+    video.src = "";
+    playerContainer.classList.add('hidden');
+}
+
+// تشغيل عند البداية
+document.addEventListener('DOMContentLoaded', () => renderChannels());
+
+function filterChannels(cat) {
+    // تغيير لون الأزرار
+    document.querySelectorAll('.categories button').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    renderChannels(cat);
+}
