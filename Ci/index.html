@@ -3,167 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>66 LIVE - البث المباشر</title>
+    <title>66 LIVE - Premium</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* --- التصميم (CSS) --- */
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap');
 
         :root {
-            --neon-green: #00ff41;
-            --dark-bg: #051405;
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.2);
             --text-color: #ffffff;
         }
 
         body {
-            background-color: var(--dark-bg);
+            background: #0f0c29;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #24243e, #302b63, #0f0c29);
+            background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
             color: var(--text-color);
             margin: 0;
-            padding: 0;
             font-family: 'Cairo', sans-serif;
-            padding-bottom: 60px;
+            padding-bottom: 80px;
+            min-height: 100vh;
         }
 
         /* الهيدر */
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            background: rgba(0, 20, 0, 0.95);
-            border-bottom: 2px solid var(--neon-green);
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            text-align: center;
+            border-bottom: var(--glass-border);
             position: sticky;
             top: 0;
-            z-index: 1000;
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+            z-index: 100;
         }
 
         .logo {
-            font-size: 22px;
-            font-weight: 900;
-            color: var(--neon-green);
-            font-style: italic;
-            text-shadow: 0 0 10px var(--neon-green);
+            font-size: 26px;
+            font-weight: 800;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
         }
 
-        /* القائمة */
-        .main-container { padding: 10px; }
-        
+        .status-dot {
+            height: 10px; width: 10px;
+            background-color: #00ff88;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 10px #00ff88;
+            margin-right: 5px;
+        }
+
+        /* حاوية القنوات */
+        .container {
+            padding: 20px;
+            display: grid;
+            gap: 15px;
+        }
+
+        /* بطاقة القناة (تصميم زجاجي) */
         .channel-card {
-            background: linear-gradient(90deg, rgba(0,255,65,0.05) 0%, rgba(10,30,10,1) 100%);
-            border: 1px solid #1f3f1f;
-            border-right: 4px solid var(--neon-green);
+            background: var(--glass-bg);
+            backdrop-filter: blur(5px);
+            border: var(--glass-border);
+            border-radius: 15px;
             padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            transition: transform 0.2s, background 0.2s;
             cursor: pointer;
-            transition: 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        .channel-card:active { background: #0f2f0f; }
-        .channel-card h3 { margin: 0; font-size: 16px; font-weight: bold; }
-        .live-badge { color: #ff4444; font-size: 11px; font-weight: bold; border: 1px solid #ff4444; padding: 2px 6px; border-radius: 4px; }
-
-        /* منطقة المشغل */
-        .player-box {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: black; z-index: 2000;
-            display: none; flex-direction: column; justify-content: center;
-        }
-        
-        .show { display: flex !important; }
-        .hidden { display: none !important; }
-        
-        /* تنسيق الفيديو والنافذة */
-        video, iframe { width: 100%; height: 100%; max-height: 80vh; border: none; background: black; }
-        
-        .close-player {
-            position: absolute; top: 30px; right: 20px;
-            color: white; border: 1px solid white;
-            padding: 8px 20px; border-radius: 5px;
-            cursor: pointer; background: rgba(0,0,0,0.8);
-            z-index: 2005; font-weight: bold;
+        .channel-card:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
-        footer { text-align: center; color: #666; font-size: 12px; margin-top: 20px; }
+        .card-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .icon-box {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            box-shadow: 0 0 15px rgba(0, 114, 255, 0.4);
+        }
+
+        .channel-name {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .play-icon {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 18px;
+        }
+
+        /* المشغل */
+        .player-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .player-modal.active { display: flex; }
+
+        .video-wrapper {
+            width: 100%;
+            max-width: 800px;
+            background: #000;
+            border-radius: 0;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0, 114, 255, 0.2);
+        }
+
+        video, iframe {
+            width: 100%;
+            height: 50vh; /* ارتفاع مناسب للموبايل */
+            border: none;
+        }
+
+        .close-btn {
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        .close-btn:hover { background: #ff4444; border-color: #ff4444; }
+
+        /* الفوتر */
+        footer {
+            text-align: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 30px;
+        }
     </style>
 </head>
 <body>
 
-    <nav class="top-bar">
-        <div class="logo">66 LIVE</div>
-        <div style="font-size:12px; color:#aaa;">بث مباشر</div>
-    </nav>
-
-    <div id="playerContainer" class="player-box">
-        <div class="close-player" onclick="closeVideo()">إغلاق X</div>
-        
-        <video id="videoPlayer" controls autoplay class="hidden"></video>
-        
-        <iframe id="webPlayer" class="hidden" allowfullscreen></iframe>
+    <div class="header">
+        <div class="logo"><span class="status-dot"></span> 66 LIVE</div>
+        <div style="font-size: 13px; color: #aaa; margin-top: 5px;">البث المباشر للقنوات العالمية</div>
     </div>
 
-    <div class="main-container" id="channelList"></div>
+    <div class="container" id="channelList">
+        </div>
 
-    <footer>حقوق النشر محفوظة © 2024</footer>
+    <footer>
+        Designed by 66 ZONE © 2024
+    </footer>
+
+    <div id="playerModal" class="player-modal">
+        <button class="close-btn" onclick="closePlayer()">
+            <i class="fas fa-times"></i> إغلاق المشغل
+        </button>
+        
+        <div class="video-wrapper">
+            <video id="videoPlayer" controls class="hidden" style="display:none;"></video>
+            <iframe id="webPlayer" allowfullscreen style="display:none;"></iframe>
+        </div>
+    </div>
 
     <script>
-        // --- إعدادات القنوات ---
-        // type: "stream"  -> للقنوات التي تنتهي بـ m3u8 أو ts
-        // type: "iframe"  -> لروابط المواقع (مثل الرابط الذي أرسلته)
+        // --- قائمة القنوات ---
+        // type: 'stream' (لروابط m3u8/ts)
+        // type: 'iframe' (لروابط المواقع)
         
         const channels = [
-            { 
-                name: "MBC 1 (ويب)", 
-                link: "https://www.elahmad.com/tv/mobiletv/glarb.php?id=mbc1_tv_1", 
-                type: "iframe" // 👈 استخدمنا iframe لأن هذا رابط موقع
-            },
-            { 
-                name: "قناة اختبارية (فيديو)", 
-                link: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", 
-                type: "stream" // 👈 استخدمنا stream لأنه رابط فيديو مباشر
+            {
+                name: "MBC 1 Live",
+                link: "https://www.elahmad.com/tv/mobiletv/glarb.php?id=mbc1_tv_1",
+                type: "iframe",
+                icon: "fa-tv"
             },
             {
-                name: "BeIN Sports (تجربة)",
-                link: "ضع_رابط_M3U8_الخاص_بك_هنا",
-                type: "stream"
+                name: "BeIN Sports (مثال)",
+                link: "ضع_رابطك_هنا", 
+                type: "stream",
+                icon: "fa-futbol"
+            },
+            {
+                name: "قناة اختبارية (Video)",
+                link: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                type: "stream",
+                icon: "fa-play-circle"
             }
         ];
 
-        // --- كود البرمجة (لا تعدل شيئاً هنا) ---
+        // --- توليد القائمة ---
         const list = document.getElementById('channelList');
         
         channels.forEach(ch => {
             list.innerHTML += `
-            <div class="channel-card" onclick="play('${ch.link}', '${ch.type}')">
-                <h3>${ch.name}</h3>
-                <span class="live-badge">LIVE ●</span>
-            </div>`;
+            <div class="channel-card" onclick="openPlayer('${ch.link}', '${ch.type}')">
+                <div class="card-info">
+                    <div class="icon-box">
+                        <i class="fas ${ch.icon}"></i>
+                    </div>
+                    <div class="channel-name">${ch.name}</div>
+                </div>
+                <i class="fas fa-chevron-left play-icon"></i>
+            </div>
+            `;
         });
 
-        function play(url, type) {
-            const box = document.getElementById('playerContainer');
-            const vid = document.getElementById('videoPlayer');
-            const web = document.getElementById('webPlayer');
+        // --- وظائف التشغيل ---
+        const modal = document.getElementById('playerModal');
+        const vid = document.getElementById('videoPlayer');
+        const web = document.getElementById('webPlayer');
 
-            box.classList.add('show');
+        function openPlayer(url, type) {
+            modal.classList.add('active');
 
             if (type === 'iframe') {
-                // وضع تشغيل صفحة الويب
+                vid.style.display = 'none';
                 vid.pause();
-                vid.classList.add('hidden');
-                web.classList.remove('hidden');
+                web.style.display = 'block';
                 web.src = url;
             } else {
-                // وضع تشغيل الفيديو المباشر
-                web.classList.add('hidden');
-                web.src = ""; // إيقاف صفحة الويب
-                vid.classList.remove('hidden');
+                web.style.display = 'none';
+                web.src = "";
+                vid.style.display = 'block';
                 
                 if (Hls.isSupported()) {
                     const hls = new Hls();
@@ -177,15 +268,11 @@
             }
         }
 
-        function closeVideo() {
-            const box = document.getElementById('playerContainer');
-            const vid = document.getElementById('videoPlayer');
-            const web = document.getElementById('webPlayer');
-            
+        function closePlayer() {
+            modal.classList.remove('active');
             vid.pause();
             vid.src = "";
-            web.src = ""; // إيقاف تحميل الصفحة
-            box.classList.remove('show');
+            web.src = "";
         }
     </script>
 </body>
