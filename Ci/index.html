@@ -14,6 +14,7 @@
             --glass-bg: rgba(255, 255, 255, 0.1);
             --glass-border: 1px solid rgba(255, 255, 255, 0.15);
             --text-color: #ffffff;
+            --active-color: #00c6ff;
             --main-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
@@ -23,7 +24,7 @@
             color: var(--text-color);
             margin: 0;
             font-family: 'Cairo', sans-serif;
-            padding-bottom: 80px;
+            padding-bottom: 80px; /* مسافة للشريط السفلي */
             min-height: 100vh;
         }
 
@@ -32,79 +33,116 @@
             background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(15px);
             padding: 15px;
-            text-align: center;
             border-bottom: var(--glass-border);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            display: flex; justify-content: center; align-items: center;
+            position: sticky; top: 0; z-index: 100;
+            display: flex; justify-content: space-between; align-items: center;
         }
 
         .logo {
-            font-size: 24px;
-            font-weight: 900;
+            font-size: 20px; font-weight: 900;
             background: linear-gradient(to right, #00c6ff, #0072ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        /* زر الرجوع (يظهر فقط داخل الأقسام) */
+        /* زر التليجرام */
+        .telegram-btn {
+            color: #0088cc; font-size: 24px; text-decoration: none;
+            transition: 0.3s;
+        }
+        .telegram-btn:hover { color: white; transform: scale(1.1); }
+
+        /* زر الرجوع */
         .back-btn {
-            position: absolute; right: 15px;
             background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
             color: white; padding: 5px 15px; border-radius: 20px;
             cursor: pointer; display: none; font-size: 14px;
         }
 
-        /* الصفحة الرئيسية (قائمة الأقسام) */
-        .home-view { padding: 20px; display: grid; gap: 15px; }
+        /* الحاويات (Views) */
+        .view-container { display: none; padding: 20px; animation: fadeIn 0.3s; }
+        .active-view { display: grid; gap: 15px; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* بطاقات الأقسام */
         .category-card {
             background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-            border: var(--glass-border);
-            border-radius: 15px;
-            padding: 25px;
+            border: var(--glass-border); border-radius: 15px; padding: 20px;
             display: flex; align-items: center; justify-content: space-between;
             cursor: pointer; transition: 0.3s;
         }
-
         .category-card:hover { transform: scale(1.02); background: rgba(255,255,255,0.2); }
-
-        .cat-info { display: flex; align-items: center; gap: 20px; }
-        
         .cat-icon {
-            width: 60px; height: 60px;
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 26px; color: white;
-            box-shadow: 0 0 20px rgba(0,114,255,0.4);
+            width: 50px; height: 50px; background: linear-gradient(135deg, #00c6ff, #0072ff);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 22px; color: white; margin-left: 15px;
         }
 
-        .cat-title h3 { margin: 0; font-size: 18px; }
-        .cat-title span { font-size: 12px; color: #aaa; }
-
-        /* صفحة القنوات (مخفية بالبداية) */
-        .channels-view {
-            display: none; /* مخفية */
-            padding: 20px;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 15px;
+        /* شبكة القنوات */
+        .channels-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px;
         }
 
+        /* بطاقة القناة */
         .channel-card {
-            background: var(--glass-bg);
-            border: var(--glass-border);
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
+            background: var(--glass-bg); border: var(--glass-border);
+            border-radius: 12px; padding: 15px; text-align: center;
+            cursor: pointer; transition: 0.2s; position: relative;
+        }
+        .channel-card:hover { background: rgba(255,255,255,0.2); transform: translateY(-3px); }
+        .ch-icon { font-size: 24px; color: var(--active-color); margin-bottom: 10px; }
+        
+        /* نجمة المفضلة */
+        .fav-star {
+            position: absolute; top: 10px; left: 10px;
+            color: rgba(255,255,255,0.3); font-size: 16px; transition: 0.3s;
+            z-index: 10;
+        }
+        .fav-star.active { color: gold; text-shadow: 0 0 10px gold; }
+
+        /* البحث */
+        .search-box {
+            width: 100%; padding: 12px; border-radius: 10px;
+            border: var(--glass-border); background: rgba(0,0,0,0.3);
+            color: white; font-family: 'Cairo'; margin-bottom: 20px;
+            outline: none;
         }
 
-        .channel-card:hover { background: rgba(255,255,255,0.2); transform: translateY(-5px); }
-        .ch-icon { font-size: 24px; color: #00c6ff; margin-bottom: 10px; }
-        .ch-name { font-size: 14px; font-weight: bold; }
+        /* الملف الشخصي */
+        .profile-card {
+            background: var(--glass-bg); padding: 30px; border-radius: 20px;
+            text-align: center; border: var(--glass-border);
+        }
+        .profile-avatar {
+            width: 80px; height: 80px; background: #ddd; border-radius: 50%;
+            margin: 0 auto 15px; display: flex; align-items: center; justify-content: center;
+            font-size: 30px; color: #333;
+        }
+        .input-group { margin-bottom: 15px; text-align: right; }
+        .input-group label { display: block; margin-bottom: 5px; font-size: 12px; color: #aaa; }
+        .input-group input {
+            width: 100%; padding: 10px; background: rgba(0,0,0,0.3);
+            border: 1px solid #444; color: white; border-radius: 8px;
+        }
+        .save-btn {
+            background: var(--active-color); color: white; border: none;
+            padding: 10px 30px; border-radius: 20px; cursor: pointer; font-weight: bold;
+        }
+
+        /* الشريط السفلي */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(15, 12, 41, 0.9); backdrop-filter: blur(10px);
+            border-top: var(--glass-border);
+            display: flex; justify-content: space-around; padding: 10px 0;
+            z-index: 900;
+        }
+        .nav-item {
+            color: #777; text-align: center; font-size: 10px;
+            cursor: pointer; transition: 0.3s;
+        }
+        .nav-item i { font-size: 20px; display: block; margin-bottom: 3px; }
+        .nav-item.active { color: var(--active-color); text-shadow: 0 0 10px var(--active-color); }
 
         /* المشغل */
         .player-modal {
@@ -112,94 +150,118 @@
             background: black; z-index: 2000;
             display: none; flex-direction: column; justify-content: center; align-items: center;
         }
-        
         .active-modal { display: flex; }
-        .video-box { width: 100%; max-width: 800px; }
-        video, iframe { width: 100%; height: 50vh; border: none; }
-        
+        video, iframe { width: 100%; height: 50vh; border: none; max-width: 800px; }
         .close-player-btn {
-            margin-bottom: 20px; padding: 10px 30px;
-            background: #ff4444; border: none; color: white;
-            border-radius: 30px; font-weight: bold; cursor: pointer;
+            margin-bottom: 20px; padding: 8px 25px; background: #ff4444;
+            border: none; color: white; border-radius: 20px; cursor: pointer;
         }
 
-        footer { text-align: center; margin-top: 40px; color: #777; font-size: 12px; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <button class="back-btn" id="backBtn" onclick="goHome()">
+        <button class="back-btn" id="backBtn" onclick="backToCategories()">
             <i class="fas fa-arrow-right"></i> رجوع
         </button>
         <div class="logo">66 LIVE</div>
+        <a href="https://t.me/C9_9P" target="_blank" class="telegram-btn">
+            <i class="fab fa-telegram"></i>
+        </a>
     </div>
 
-    <div class="home-view" id="homeView">
+    <div class="view-container active-view" id="view-home">
         
-        <div class="category-card" onclick="openCategory('bein')">
-            <div class="cat-info">
-                <div class="cat-icon"><i class="fas fa-futbol"></i></div>
-                <div class="cat-title">
-                    <h3>BeIN Sports</h3>
-                    <span>دوري أبطال أوروبا، إنجليزي...</span>
+        <div id="categories-list">
+            <div class="category-card" onclick="openCategory('bein')">
+                <div style="display:flex; align-items:center;">
+                    <div class="cat-icon"><i class="fas fa-futbol"></i></div>
+                    <div><h3>BeIN Sports</h3><span style="font-size:11px; color:#aaa">رياضة عالمية</span></div>
                 </div>
+                <i class="fas fa-chevron-left" style="color:#aaa"></i>
             </div>
-            <i class="fas fa-chevron-left" style="color:#aaa"></i>
+            
+            <div class="category-card" onclick="openCategory('mbc')">
+                <div style="display:flex; align-items:center;">
+                    <div class="cat-icon"><i class="fas fa-film"></i></div>
+                    <div><h3>MBC Group</h3><span style="font-size:11px; color:#aaa">أفلام ومسلسلات</span></div>
+                </div>
+                <i class="fas fa-chevron-left" style="color:#aaa"></i>
+            </div>
+
+            <div class="category-card" onclick="openCategory('ssc')">
+                <div style="display:flex; align-items:center;">
+                    <div class="cat-icon"><i class="fas fa-running"></i></div>
+                    <div><h3>SSC Sports</h3><span style="font-size:11px; color:#aaa">الدوري السعودي</span></div>
+                </div>
+                <i class="fas fa-chevron-left" style="color:#aaa"></i>
+            </div>
+
+            <div class="category-card" onclick="openCategory('news')">
+                <div style="display:flex; align-items:center;">
+                    <div class="cat-icon"><i class="fas fa-newspaper"></i></div>
+                    <div><h3>أخبار</h3><span style="font-size:11px; color:#aaa">الجزيرة والعربية</span></div>
+                </div>
+                <i class="fas fa-chevron-left" style="color:#aaa"></i>
+            </div>
         </div>
 
-        <div class="category-card" onclick="openCategory('mbc')">
-            <div class="cat-info">
-                <div class="cat-icon"><i class="fas fa-film"></i></div>
-                <div class="cat-title">
-                    <h3>MBC Group</h3>
-                    <span>أفلام، مسلسلات، أكشن...</span>
-                </div>
-            </div>
-            <i class="fas fa-chevron-left" style="color:#aaa"></i>
-        </div>
-
-        <div class="category-card" onclick="openCategory('ssc')">
-            <div class="cat-info">
-                <div class="cat-icon"><i class="fas fa-running"></i></div>
-                <div class="cat-title">
-                    <h3>SSC Sports</h3>
-                    <span>الدوري السعودي، آسيا...</span>
-                </div>
-            </div>
-            <i class="fas fa-chevron-left" style="color:#aaa"></i>
-        </div>
-
-        <div class="category-card" onclick="openCategory('news')">
-            <div class="cat-info">
-                <div class="cat-icon"><i class="fas fa-newspaper"></i></div>
-                <div class="cat-title">
-                    <h3>أخبار عالمية</h3>
-                    <span>الجزيرة، العربية...</span>
-                </div>
-            </div>
-            <i class="fas fa-chevron-left" style="color:#aaa"></i>
-        </div>
-
+        <div class="channels-grid" id="channels-grid" style="display:none;"></div>
     </div>
 
-    <div class="channels-view" id="channelsView"></div>
+    <div class="view-container" id="view-favorites">
+        <h3 style="text-align:center; color:#00c6ff;">قنواتي المفضلة ⭐</h3>
+        <div class="channels-grid" id="fav-grid"></div>
+        <p id="no-fav" style="text-align:center; color:#777; margin-top:50px;">لا توجد قنوات مفضلة حالياً</p>
+    </div>
 
-    <footer>Designed by 66 ZONE © 2024</footer>
+    <div class="view-container" id="view-search">
+        <input type="text" class="search-box" placeholder="ابحث عن اسم القناة..." onkeyup="searchChannels(this.value)">
+        <div class="channels-grid" id="search-grid"></div>
+    </div>
+
+    <div class="view-container" id="view-profile">
+        <div class="profile-card">
+            <div class="profile-avatar"><i class="fas fa-user"></i></div>
+            <h3 id="display-name">زائر</h3>
+            <div class="input-group">
+                <label>الاسم</label>
+                <input type="text" id="input-name" placeholder="أدخل اسمك">
+            </div>
+            <div class="input-group">
+                <label>العمر</label>
+                <input type="number" id="input-age" placeholder="أدخل عمرك">
+            </div>
+            <button class="save-btn" onclick="saveProfile()">حفظ البيانات</button>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('home', this)">
+            <i class="fas fa-home"></i> الرئيسية
+        </div>
+        <div class="nav-item" onclick="switchTab('favorites', this)">
+            <i class="fas fa-star"></i> المفضلة
+        </div>
+        <div class="nav-item" onclick="switchTab('search', this)">
+            <i class="fas fa-search"></i> بحث
+        </div>
+        <div class="nav-item" onclick="switchTab('profile', this)">
+            <i class="fas fa-user"></i> حسابي
+        </div>
+    </div>
 
     <div id="playerModal" class="player-modal">
-        <button class="close-player-btn" onclick="closePlayer()">إغلاق المشغل</button>
-        <div class="video-box">
-            <video id="videoPlayer" controls style="display:none;"></video>
-            <iframe id="webPlayer" allowfullscreen style="display:none;"></iframe>
-        </div>
+        <button class="close-player-btn" onclick="closePlayer()">إغلاق</button>
+        <video id="videoPlayer" controls style="display:none;"></video>
+        <iframe id="webPlayer" allowfullscreen style="display:none;"></iframe>
     </div>
 
     <script>
-        // ==========================================
-        // قاعدة بيانات القنوات (نظم روابطك هنا)
-        // ==========================================
-        
+        // ========================
+        // 1. قاعدة بيانات القنوات
+        // ========================
         const allChannels = {
             'bein': [
                 { name: "BeIN Sports 1", link: "ضع_الرابط_هنا", type: "stream" },
@@ -221,74 +283,33 @@
             ]
         };
 
-        // ==========================================
-        // كود التنقل والتشغيل
-        // ==========================================
+        // ========================
+        // 2. إدارة التنقل (Tabs)
+        // ========================
+        function switchTab(viewId, btn) {
+            // إخفاء جميع الواجهات
+            document.querySelectorAll('.view-container').forEach(el => {
+                el.style.display = 'none';
+                el.classList.remove('active-view');
+            });
+            // إظهار الواجهة المطلوبة
+            const target = document.getElementById('view-' + viewId);
+            target.style.display = (viewId === 'home' || viewId === 'profile') ? 'grid' : 'block';
+            target.classList.add('active-view');
 
-        const homeView = document.getElementById('homeView');
-        const channelsView = document.getElementById('channelsView');
+            // تحديث أزرار الشريط السفلي
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            btn.classList.add('active');
+
+            // تحديث المحتوى حسب القسم
+            if(viewId === 'favorites') loadFavorites();
+            if(viewId === 'profile') loadProfile();
+        }
+
+        // ========================
+        // 3. إدارة القسم الرئيسي
+        // ========================
+        const catsList = document.getElementById('categories-list');
+        const chanGrid = document.getElementById('channels-grid');
         const backBtn = document.getElementById('backBtn');
-
-        // دالة فتح القسم
-        function openCategory(catId) {
-            // إخفاء الرئيسية وإظهار القنوات
-            homeView.style.display = 'none';
-            channelsView.style.display = 'grid';
-            backBtn.style.display = 'block';
-
-            // تفريغ القائمة القديمة
-            channelsView.innerHTML = '';
-
-            // جلب القنوات الخاصة بالقسم
-            const channels = allChannels[catId];
-
-            if(channels) {
-                channels.forEach(ch => {
-                    channelsView.innerHTML += `
-                    <div class="channel-card" onclick="openPlayer('${ch.link}', '${ch.type}')">
-                        <div class="ch-icon"><i class="fas fa-play-circle"></i></div>
-                        <div class="ch-name">${ch.name}</div>
-                    </div>`;
-                });
-            } else {
-                channelsView.innerHTML = '<p style="color:white;">لا توجد قنوات هنا حالياً</p>';
-            }
-        }
-
-        // دالة الرجوع للرئيسية
-        function goHome() {
-            homeView.style.display = 'grid';
-            channelsView.style.display = 'none';
-            backBtn.style.display = 'none';
-        }
-
-        // وظائف المشغل (نفس القديمة)
-        const modal = document.getElementById('playerModal');
-        const vid = document.getElementById('videoPlayer');
-        const web = document.getElementById('webPlayer');
-
-        function openPlayer(url, type) {
-            if(url.includes("ضع_الرابط")) { alert("لم يتم إضافة الرابط بعد!"); return; }
-            
-            modal.classList.add('active-modal');
-            if (type === 'iframe') {
-                vid.style.display = 'none'; vid.pause();
-                web.style.display = 'block'; web.src = url;
-            } else {
-                web.style.display = 'none'; web.src = "";
-                vid.style.display = 'block';
-                if (Hls.isSupported()) {
-                    const hls = new Hls(); hls.loadSource(url); hls.attachMedia(vid); hls.on(Hls.Events.MANIFEST_PARSED, () => vid.play());
-                } else if (vid.canPlayType('application/vnd.apple.mpegurl')) {
-                    vid.src = url; vid.play();
-                }
-            }
-        }
-
-        function closePlayer() {
-            modal.classList.remove('active-modal');
-            vid.pause(); vid.src = ""; web.src = "";
-        }
-    </script>
-</body>
-</html>
+                
