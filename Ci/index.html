@@ -6,27 +6,91 @@
     <title>66 LIVE</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* --- التصميم (CSS) --- */
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+        :root { --neon-green: #00ff41; --dark-bg: #051405; --text-color: #ffffff; }
+        body { background-color: var(--dark-bg); color: var(--text-color); margin: 0; font-family: 'Cairo', sans-serif; padding-bottom: 60px; }
+        
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: rgba(0, 20, 0, 0.95); border-bottom: 2px solid var(--neon-green); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 22px; font-weight: 900; color: var(--neon-green); font-style: italic; }
+        
+        .channel-card { background: linear-gradient(90deg, rgba(0,255,65,0.05) 0%, rgba(10,30,10,1) 100%); border: 1px solid #1f3f1f; border-right: 4px solid var(--neon-green); padding: 15px; margin: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .channel-card h3 { margin: 0; font-size: 16px; font-weight: bold; }
+        .live-badge { color: #ff4444; font-size: 11px; font-weight: bold; border: 1px solid #ff4444; padding: 2px 6px; border-radius: 4px; }
+
+        .player-box { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 2000; display: none; flex-direction: column; justify-content: center; }
+        .show { display: flex !important; }
+        .hidden { display: none !important; }
+        video, iframe { width: 100%; height: 100%; max-height: 80vh; border: none; background: black; }
+        .close-player { position: absolute; top: 30px; right: 20px; color: white; border: 1px solid white; padding: 8px 20px; border-radius: 5px; cursor: pointer; background: rgba(0,0,0,0.8); z-index: 2005; }
+    </style>
 </head>
 <body>
 
     <nav class="top-bar">
         <div class="logo">66 LIVE</div>
-        <div class="sub-logo">بث مباشر</div>
     </nav>
 
     <div id="playerContainer" class="player-box">
         <div class="close-player" onclick="closeVideo()">إغلاق X</div>
-        
         <video id="videoPlayer" controls autoplay class="hidden"></video>
-        
         <iframe id="webPlayer" class="hidden" allowfullscreen></iframe>
     </div>
 
-    <div class="main-container" id="channelList"></div>
+    <div class="main-container" id="channelList" style="padding:10px;"></div>
 
-    <footer>حقوق النشر محفوظة © 2024</footer>
+    <script>
+        // --- القنوات ---
+        const channels = [
+            { 
+                name: "MBC 1 (ويب)", 
+                link: "https://www.elahmad.com/tv/mobiletv/glarb.php?id=mbc1_tv_1", 
+                type: "iframe" 
+            },
+            { 
+                name: "قناة اختبارية (فيديو)", 
+                link: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", 
+                type: "stream" 
+            }
+        ];
 
-    <script src="script.js"></script>
+        // --- البرمجة ---
+        const list = document.getElementById('channelList');
+        channels.forEach(ch => {
+            list.innerHTML += `
+            <div class="channel-card" onclick="play('${ch.link}', '${ch.type}')">
+                <h3>${ch.name}</h3>
+                <span class="live-badge">LIVE ●</span>
+            </div>`;
+        });
+
+        function play(url, type) {
+            const box = document.getElementById('playerContainer');
+            const vid = document.getElementById('videoPlayer');
+            const web = document.getElementById('webPlayer');
+            box.classList.add('show');
+
+            if (type === 'iframe') {
+                vid.pause(); vid.classList.add('hidden');
+                web.classList.remove('hidden'); web.src = url;
+            } else {
+                web.classList.add('hidden'); web.src = "";
+                vid.classList.remove('hidden');
+                if (Hls.isSupported()) {
+                    const hls = new Hls(); hls.loadSource(url); hls.attachMedia(vid); hls.on(Hls.Events.MANIFEST_PARSED, () => vid.play());
+                } else if (vid.canPlayType('application/vnd.apple.mpegurl')) {
+                    vid.src = url; vid.play();
+                }
+            }
+        }
+
+        function closeVideo() {
+            document.getElementById('playerContainer').classList.remove('show');
+            document.getElementById('videoPlayer').pause();
+            document.getElementById('webPlayer').src = "";
+        }
+    </script>
 </body>
 </html>
