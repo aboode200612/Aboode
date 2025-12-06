@@ -3,152 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>66 LIVE - VIP</title>
+    <title>66 ZONE - VIP</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         /* ==================== 
-           1. التصميم (ألوان جديدة مستوحاة من الصورة)
+           1. التصميم (داكن + تدرجات أصفر/أخضر/أزرق)
            ==================== */
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap');
 
         :root {
-            --primary: #ff6b00; /* برتقالي ساطع للإشارة */
-            --secondary: #333333; /* أسود/رمادي غامق للنصوص */
-            --bg-light: #f5f5f5; /* خلفية فاتحة فضية/بيضاء */
-            --glass: rgba(240, 240, 240, 0.9); /* خلفية شبه شفافة فاتحة للبطاقات */
-            --border: 1px solid rgba(0, 0, 0, 0.1); /* حدود رمادية خفيفة */
-            --nav-bg: rgba(255, 255, 255, 0.98); /* خلفية بيضاء للشريط */
-            --text-dark: #222222; /* لون النص الأساسي */
+            /* التدرج اللوني الجديد: أصفر -> أخضر -> أزرق فاتح */
+            --main-gradient: linear-gradient(90deg, #FFD700, #32CD32, #00FFFF);
+            --bg-dark: #0a0a12;     /* خلفية داكنة جداً */
+            --glass-bg: rgba(255, 255, 255, 0.05); /* زجاجي شفاف */
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-color: #ffffff;
+            --nav-bg: rgba(10, 10, 18, 0.95);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            background: var(--bg-light);
-            background-image: radial-gradient(circle at 10% 20%, rgba(255, 107, 0, 0.05) 0%, transparent 20%),
-                              radial-gradient(circle at 90% 80%, rgba(255, 107, 0, 0.05) 0%, transparent 20%);
-            color: var(--text-dark); margin: 0; font-family: 'Cairo', sans-serif;
-            padding-bottom: 80px; min-height: 100vh; overflow-x: hidden;
+            background-color: var(--bg-dark);
+            /* تأثير إضاءة خفيف في الخلفية */
+            background-image: radial-gradient(circle at 10% 10%, rgba(50, 205, 50, 0.15) 0%, transparent 40%),
+                              radial-gradient(circle at 90% 90%, rgba(0, 255, 255, 0.15) 0%, transparent 40%);
+            color: var(--text-color);
+            margin: 0; font-family: 'Cairo', sans-serif;
+            padding-bottom: 85px; min-height: 100vh; overflow-x: hidden;
         }
 
-        /* الهيدر */
+        /* --- الهيدر --- */
         header {
-            position: sticky; top: 0; z-index: 900;
-            background: var(--nav-bg); backdrop-filter: blur(15px);
-            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
-            border-bottom: var(--border);
+            position: sticky; top: 0; z-index: 1000;
+            background: var(--nav-bg); backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
         }
 
-        .brand {
-            font-size: 20px; font-weight: 900;
-            color: var(--text-dark); /* نص أسود */
+        .brand-container {
+            display: flex; align-items: center; gap: 10px;
         }
 
-        .tg-btn { font-size: 22px; color: var(--primary); text-decoration: none; } /* أيقونة برتقالية */
-
-        /* الصفحات */
-        .page { display: none; padding: 15px; animation: fadeEffect 0.3s; }
-        .page.active { display: block; }
-        @keyframes fadeEffect { from { opacity: 0; } to { opacity: 1; } }
-
-        /* بطاقات الأقسام */
-        .categories-grid { display: grid; gap: 12px; }
+        /* مكان اللوجو */
+        .brand-logo {
+            width: 35px; height: 35px;
+            /* إذا كان لديك رابط صورة، ضعه في كود HTML بدلاً من الأيقونة */
+            background: var(--main-gradient);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; color: #000;
+            box-shadow: 0 0 15px rgba(50, 205, 50, 0.4);
+        }
         
-        .cat-card {
-            background: var(--glass);
-            border: var(--border); border-radius: 15px; padding: 20px;
-            display: flex; align-items: center; justify-content: space-between;
-            cursor: pointer; position: relative; overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        .brand-name {
+            font-size: 22px; font-weight: 900;
+            background: var(--main-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
         }
-        .cat-card:active { transform: scale(0.98); background: #e0e0e0; }
-        /* شريط جانبي برتقالي */
+
+        .tg-btn { 
+            font-size: 24px; color: #00FFFF; text-decoration: none; 
+            filter: drop-shadow(0 0 5px rgba(0,255,255,0.5));
+        }
+
+        /* --- الصفحات --- */
+        .page { display: none; padding: 15px; animation: fadeIn 0.4s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- بطاقات الأقسام --- */
+        .categories-grid { display: grid; gap: 15px; }
+
+        .cat-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            border: var(--border-color); border-radius: 16px; padding: 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            position: relative; overflow: hidden; cursor: pointer; transition: 0.3s;
+        }
+        .cat-card:active { transform: scale(0.98); background: rgba(255,255,255,0.08); }
+        
+        /* الخط الملون الجانبي (التدرج الجديد) */
         .cat-card::before {
             content: ''; position: absolute; right: 0; top: 0; width: 4px; height: 100%;
-            background: var(--primary);
+            background: var(--main-gradient);
         }
 
         .cat-content { display: flex; align-items: center; gap: 15px; }
+        
         .cat-icon {
-            font-size: 24px; color: var(--primary);
-            width: 45px; height: 45px; border-radius: 50%; background: rgba(255, 107, 0, 0.1);
+            width: 50px; height: 50px; border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.3);
             display: flex; align-items: center; justify-content: center;
+            font-size: 24px;
         }
-        .cat-text h3 { margin: 0; font-size: 16px; font-weight: 700; color: var(--text-dark); }
-        .cat-text span { font-size: 11px; color: #666; }
+        /* تلوين الأيقونات بالتدرج */
+        .cat-icon i {
+            background: var(--main-gradient);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
 
-        /* شبكة القنوات */
+        .cat-text h3 { margin: 0; font-size: 17px; font-weight: 700; color: #fff; }
+        .cat-text span { font-size: 12px; color: #aaa; }
+
+        /* --- شبكة القنوات --- */
         .channels-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px;
         }
 
         .ch-card {
-            background: var(--glass); border: var(--border); border-radius: 12px;
-            padding: 15px; text-align: center; cursor: pointer; position: relative;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            background: var(--glass-bg); border: var(--border-color);
+            border-radius: 12px; padding: 15px; text-align: center;
+            cursor: pointer; position: relative; transition: 0.2s;
         }
-        .ch-card:active { background: #e0e0e0; }
+        .ch-card:active { background: rgba(255,255,255,0.1); transform: translateY(-3px); }
 
-        .ch-icon { font-size: 26px; color: var(--secondary); margin-bottom: 8px; }
-        .ch-name { font-size: 13px; font-weight: 600; line-height: 1.4; color: var(--text-dark); }
+        .ch-icon { 
+            font-size: 30px; margin-bottom: 10px;
+            background: var(--main-gradient);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .ch-name { font-size: 13px; font-weight: 600; color: #eee; }
 
         .fav-star {
-            position: absolute; top: 8px; left: 8px; font-size: 16px;
-            color: #ccc; z-index: 5; padding: 5px;
+            position: absolute; top: 10px; left: 10px; font-size: 16px;
+            color: rgba(255,255,255,0.2); z-index: 5;
         }
-        .fav-star.active { color: var(--primary); } /* نجمة برتقالية */
+        .fav-star.active { color: #FFD700; text-shadow: 0 0 10px #FFD700; }
 
-        /* زر الرجوع من القنوات */
+        /* زر الرجوع */
         .back-header {
-            display: flex; align-items: center; gap: 10px; margin-bottom: 15px;
-            color: var(--primary); cursor: pointer; font-weight: bold;
-            padding: 10px; background: rgba(255, 107, 0, 0.1); border-radius: 10px;
+            display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+            padding: 10px; background: rgba(255,255,255,0.05); border-radius: 10px;
+            cursor: pointer; font-weight: bold; color: #32CD32; /* أخضر نيون */
         }
 
-        /* البحث */
+        /* --- البحث --- */
         .search-box {
-            width: 100%; padding: 14px; border-radius: 12px;
-            border: 1px solid #ddd; background: white;
-            color: var(--text-dark); font-family: 'Cairo'; outline: none; margin-bottom: 20px;
+            width: 100%; padding: 15px; border-radius: 12px;
+            border: 1px solid #333; background: rgba(0,0,0,0.3);
+            color: white; font-family: 'Cairo'; outline: none; margin-bottom: 20px;
         }
-        .search-box:focus { border-color: var(--primary); }
+        .search-box:focus { border-image: var(--main-gradient); border-image-slice: 1; }
 
-        /* الشريط السفلي */
+        /* --- الشريط السفلي --- */
         .nav-bar {
             position: fixed; bottom: 0; left: 0; width: 100%;
-            background: var(--nav-bg); backdrop-filter: blur(20px);
-            border-top: var(--border); display: flex; justify-content: space-around;
-            padding: 10px 0; z-index: 1000;
+            background: var(--nav-bg); backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex; justify-content: space-around; padding: 12px 0;
+            z-index: 900;
         }
         .nav-item {
-            text-align: center; color: #888; font-size: 10px; cursor: pointer; width: 33%;
+            text-align: center; color: #666; font-size: 10px; cursor: pointer; width: 33%;
+            transition: 0.3s;
         }
-        .nav-item i { font-size: 20px; margin-bottom: 4px; display: block; }
-        .nav-item.active { color: var(--primary); } /* الأيقونة النشطة برتقالية */
-        .nav-item.active i { transform: translateY(-3px); }
+        .nav-item i { font-size: 22px; margin-bottom: 5px; display: block; }
+        
+        /* تلوين الأزرار النشطة بالتدرج */
+        .nav-item.active i {
+            background: var(--main-gradient);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            transform: translateY(-5px);
+        }
+        .nav-item.active { color: #fff; }
 
-        /* المشغل */
+        /* --- المشغل --- */
         .player-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9); z-index: 2000; display: none;
+            background: #000; z-index: 2000; display: none;
             flex-direction: column; justify-content: center;
         }
         .player-modal.open { display: flex; }
         .video-box { width: 100%; max-width: 800px; aspect-ratio: 16/9; background: #000; margin: 0 auto; }
         video, iframe { width: 100%; height: 100%; border: none; }
+        
         .close-player {
             position: absolute; top: 20px; right: 20px;
-            padding: 8px 20px; background: rgba(255,255,255,0.9); border: 1px solid #ccc;
-            color: var(--text-dark); border-radius: 20px; cursor: pointer;
+            padding: 8px 25px; 
+            background: linear-gradient(90deg, #FFD700, #32CD32); /* زر متدرج */
+            border: none; color: #000; font-weight: bold;
+            border-radius: 20px; cursor: pointer;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="brand">66 LIVE</div>
+        <div class="brand-container">
+            <div class="brand-logo"><i class="fas fa-play"></i></div> 
+            <div class="brand-name">66 ZONE</div>
+        </div>
         <a href="https://t.me/C9_9P" target="_blank" class="tg-btn"><i class="fab fa-telegram"></i></a>
     </header>
 
@@ -161,7 +213,7 @@
                     <div class="cat-icon"><i class="fas fa-futbol"></i></div>
                     <div class="cat-text"><h3>BeIN Sports</h3><span>دوريات عالمية</span></div>
                 </div>
-                <i class="fas fa-chevron-left" style="color:#888"></i>
+                <i class="fas fa-chevron-left" style="color:#555"></i>
             </div>
 
             <div class="cat-card" onclick="showChannels('mbc')">
@@ -169,7 +221,7 @@
                     <div class="cat-icon"><i class="fas fa-film"></i></div>
                     <div class="cat-text"><h3>MBC Group</h3><span>أفلام ومسلسلات</span></div>
                 </div>
-                <i class="fas fa-chevron-left" style="color:#888"></i>
+                <i class="fas fa-chevron-left" style="color:#555"></i>
             </div>
 
             <div class="cat-card" onclick="showChannels('ssc')">
@@ -177,7 +229,7 @@
                     <div class="cat-icon"><i class="fas fa-running"></i></div>
                     <div class="cat-text"><h3>SSC Sports</h3><span>الدوري السعودي</span></div>
                 </div>
-                <i class="fas fa-chevron-left" style="color:#888"></i>
+                <i class="fas fa-chevron-left" style="color:#555"></i>
             </div>
 
             <div class="cat-card" onclick="showChannels('news')">
@@ -185,7 +237,7 @@
                     <div class="cat-icon"><i class="fas fa-newspaper"></i></div>
                     <div class="cat-text"><h3>أخبار</h3><span>الجزيرة والعربية</span></div>
                 </div>
-                <i class="fas fa-chevron-left" style="color:#888"></i>
+                <i class="fas fa-chevron-left" style="color:#555"></i>
             </div>
 
         </div>
@@ -196,18 +248,17 @@
             </div>
             <div id="channels-list" class="channels-grid"></div>
         </div>
-
     </div>
 
     <div id="tab-search" class="page">
-        <input type="text" class="search-box" placeholder="ابحث عن قناة..." oninput="doSearch(this.value)">
+        <input type="text" class="search-box" placeholder="ابحث عن اسم القناة..." oninput="doSearch(this.value)">
         <div id="search-results" class="channels-grid"></div>
     </div>
 
     <div id="tab-favorites" class="page">
-        <h3 style="text-align:center; color:var(--primary);">المفضلة ⭐</h3>
+        <h3 style="text-align:center; color:#FFD700;">المفضلة ⭐</h3>
         <div id="fav-list" class="channels-grid"></div>
-        <p id="no-fav" style="text-align:center; color:#888; margin-top:30px;">لا توجد قنوات مفضلة</p>
+        <p id="no-fav" style="text-align:center; color:#777; margin-top:30px;">لا توجد قنوات مفضلة</p>
     </div>
 
     <nav class="nav-bar">
@@ -232,7 +283,7 @@
 
     <script>
         // ============================
-        // 1. قاعدة بيانات القنوات (نفس الروابط القديمة)
+        // بيانات القنوات (لا تنس وضع روابطك الحقيقية هنا)
         // ============================
         const DB = {
             'bein': [
@@ -256,7 +307,7 @@
         };
 
         // ============================
-        // 2. البرمجة (لم تتغير)
+        // المنطق البرمجي
         // ============================
 
         function navTo(tabId, btn) {
@@ -295,16 +346,16 @@
         function toggleFav(e, dataStr) {
             e.stopPropagation();
             const ch = JSON.parse(decodeURIComponent(dataStr));
-            let favs = JSON.parse(localStorage.getItem('my_favs_v3')) || [];
+            let favs = JSON.parse(localStorage.getItem('favs_zone')) || [];
             const exists = favs.find(f => f.name === ch.name);
             if(exists) { favs = favs.filter(f => f.name !== ch.name); } else { favs.push(ch); }
-            localStorage.setItem('my_favs_v3', JSON.stringify(favs));
+            localStorage.setItem('favs_zone', JSON.stringify(favs));
             updateStars();
             if(document.getElementById('tab-favorites').classList.contains('active')) loadFavs();
         }
 
         function loadFavs() {
-            const favs = JSON.parse(localStorage.getItem('my_favs_v3')) || [];
+            const favs = JSON.parse(localStorage.getItem('favs_zone')) || [];
             const container = document.getElementById('fav-list');
             const msg = document.getElementById('no-fav');
             container.innerHTML = '';
@@ -316,7 +367,7 @@
         }
 
         function updateStars() {
-            const favs = JSON.parse(localStorage.getItem('my_favs_v3')) || [];
+            const favs = JSON.parse(localStorage.getItem('favs_zone')) || [];
             document.querySelectorAll('.ch-card').forEach(card => {
                 const name = card.querySelector('.ch-name').innerText;
                 const star = card.querySelector('.fav-star');
