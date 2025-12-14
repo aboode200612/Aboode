@@ -3,191 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>66 ZONE - VIP</title>
+    <title>66 LIVE - VIP</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         /* ==================== 
-           1. التصميم (داكن + تدرجات أصفر/أخضر/أزرق)
+           1. التصميم (نفس الستايل اللي عجبك)
            ==================== */
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap');
 
         :root {
-            --main-gradient: linear-gradient(90deg, #FFD700, #32CD32, #00FFFF);
-            --bg-dark: #0a0a12;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --text-color: #ffffff;
-            --nav-bg: rgba(10, 10, 18, 0.98);
+            --primary: #00f2ff;
+            --secondary: #bd00ff;
+            --bg-dark: #050510;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: 1px solid rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(10, 10, 20, 0.98);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at 10% 10%, rgba(50, 205, 50, 0.15) 0%, transparent 40%),
-                              radial-gradient(circle at 90% 90%, rgba(0, 255, 255, 0.15) 0%, transparent 40%);
-            color: var(--text-color);
-            margin: 0; font-family: 'Cairo', sans-serif;
-            padding-bottom: 85px; min-height: 100vh; overflow-x: hidden;
+            background: var(--bg-dark);
+            background-image: radial-gradient(circle at 10% 20%, rgba(189, 0, 255, 0.1) 0%, transparent 20%),
+                              radial-gradient(circle at 90% 80%, rgba(0, 242, 255, 0.1) 0%, transparent 20%);
+            color: white; margin: 0; font-family: 'Cairo', sans-serif;
+            padding-bottom: 80px; min-height: 100vh; overflow-x: hidden;
         }
 
         /* الهيدر */
         header {
-            position: sticky; top: 0; z-index: 1000;
-            background: var(--nav-bg); backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 900;
+            background: rgba(5, 5, 16, 0.85); backdrop-filter: blur(15px);
             padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            border-bottom: var(--border);
         }
 
-        .brand-container { display: flex; align-items: center; gap: 10px; }
-        .brand-logo {
-            width: 35px; height: 35px; background: var(--main-gradient);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 18px; color: #000; box-shadow: 0 0 15px rgba(50, 205, 50, 0.4);
-        }
-        .brand-name {
-            font-size: 22px; font-weight: 900; background: var(--main-gradient);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px;
-        }
-        .tg-btn { font-size: 24px; color: #00FFFF; text-decoration: none; filter: drop-shadow(0 0 5px rgba(0,255,255,0.5)); }
-
-        /* الصفحات */
-        .page { display: none; padding: 15px; animation: fadeIn 0.4s ease; }
-        .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* الأقسام */
-        .categories-grid { display: grid; gap: 15px; }
-        .cat-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-            border: var(--border-color); border-radius: 16px; padding: 20px;
-            display: flex; align-items: center; justify-content: space-between;
-            position: relative; overflow: hidden; cursor: pointer; transition: 0.3s;
-        }
-        .cat-card:active { transform: scale(0.98); background: rgba(255,255,255,0.08); }
-        .cat-card::before {
-            content: ''; position: absolute; right: 0; top: 0; width: 4px; height: 100%;
-            background: var(--main-gradient);
-        }
-        .cat-content { display: flex; align-items: center; gap: 15px; }
-        .cat-icon {
-            width: 50px; height: 50px; border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3);
-            display: flex; align-items: center; justify-content: center; font-size: 24px;
-        }
-        .cat-icon i { background: var(--main-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .cat-text h3 { margin: 0; font-size: 17px; font-weight: 700; color: #fff; }
-        .cat-text span { font-size: 12px; color: #aaa; }
-
-        /* القنوات */
-        .channels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
-        .ch-card {
-            background: var(--glass-bg); border: var(--border-color);
-            border-radius: 12px; padding: 15px; text-align: center;
-            cursor: pointer; position: relative; transition: 0.2s;
-        }
-        .ch-card:active { background: rgba(255,255,255,0.1); transform: translateY(-3px); }
-        .ch-icon { 
-            font-size: 30px; margin-bottom: 10px; background: var(--main-gradient);
+        .brand {
+            font-size: 20px; font-weight: 900;
+            background: linear-gradient(90deg, var(--primary), white);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .ch-name { font-size: 13px; font-weight: 600; color: #eee; }
-        .fav-star {
-            position: absolute; top: 10px; left: 10px; font-size: 16px;
-            color: rgba(255,255,255,0.2); z-index: 5;
-        }
-        .fav-star.active { color: #FFD700; text-shadow: 0 0 10px #FFD700; }
 
+        .tg-btn { font-size: 22px; color: #2da5e0; text-decoration: none; }
+
+        /* الصفحات */
+        .page { display: none; padding: 15px; animation: fadeEffect 0.3s; }
+        .page.active { display: block; }
+        @keyframes fadeEffect { from { opacity: 0; } to { opacity: 1; } }
+
+        /* بطاقات الأقسام */
+        .categories-grid { display: grid; gap: 12px; }
+        
+        .cat-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border: var(--border); border-radius: 15px; padding: 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; position: relative; overflow: hidden;
+        }
+        .cat-card:active { transform: scale(0.98); background: rgba(255,255,255,0.15); }
+        /* شريط جانبي ملون لكل قسم */
+        .cat-card::before {
+            content: ''; position: absolute; right: 0; top: 0; width: 4px; height: 100%;
+            background: var(--primary);
+        }
+
+        .cat-content { display: flex; align-items: center; gap: 15px; }
+        .cat-icon {
+            font-size: 24px; color: var(--primary);
+            width: 45px; height: 45px; border-radius: 50%; background: rgba(0, 242, 255, 0.1);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .cat-text h3 { margin: 0; font-size: 16px; font-weight: 700; }
+        .cat-text span { font-size: 11px; color: #aaa; }
+
+        /* شبكة القنوات */
+        .channels-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px;
+        }
+
+        .ch-card {
+            background: var(--glass); border: var(--border); border-radius: 12px;
+            padding: 15px; text-align: center; cursor: pointer; position: relative;
+        }
+        .ch-card:active { background: rgba(255,255,255,0.1); }
+
+        .ch-icon { font-size: 26px; color: var(--secondary); margin-bottom: 8px; }
+        .ch-name { font-size: 13px; font-weight: 600; line-height: 1.4; }
+
+        .fav-star {
+            position: absolute; top: 8px; left: 8px; font-size: 16px;
+            color: rgba(255,255,255,0.2); z-index: 5; padding: 5px;
+        }
+        .fav-star.active { color: gold; text-shadow: 0 0 10px gold; }
+
+        /* زر الرجوع من القنوات */
         .back-header {
-            display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+            display: flex; align-items: center; gap: 10px; margin-bottom: 15px;
+            color: var(--primary); cursor: pointer; font-weight: bold;
             padding: 10px; background: rgba(255,255,255,0.05); border-radius: 10px;
-            cursor: pointer; font-weight: bold; color: #32CD32;
         }
 
         /* البحث */
         .search-box {
-            width: 100%; padding: 15px; border-radius: 12px;
+            width: 100%; padding: 14px; border-radius: 12px;
             border: 1px solid #333; background: rgba(0,0,0,0.3);
             color: white; font-family: 'Cairo'; outline: none; margin-bottom: 20px;
         }
-        .search-box:focus { border-image: var(--main-gradient); border-image-slice: 1; }
+        .search-box:focus { border-color: var(--primary); }
 
         /* الشريط السفلي */
         .nav-bar {
             position: fixed; bottom: 0; left: 0; width: 100%;
-            background: var(--nav-bg); backdrop-filter: blur(15px);
-            border-top: 1px solid rgba(255,255,255,0.05);
-            display: flex; justify-content: space-around; padding: 12px 0; z-index: 900;
+            background: var(--nav-bg); backdrop-filter: blur(20px);
+            border-top: var(--border); display: flex; justify-content: space-around;
+            padding: 10px 0; z-index: 1000;
         }
         .nav-item {
-            text-align: center; color: #666; font-size: 10px; cursor: pointer; width: 33%; transition: 0.3s;
+            text-align: center; color: #555; font-size: 10px; cursor: pointer; width: 33%;
         }
-        .nav-item i { font-size: 22px; margin-bottom: 5px; display: block; }
-        .nav-item.active i {
-            background: var(--main-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; transform: translateY(-5px);
-        }
-        .nav-item.active { color: #fff; }
+        .nav-item i { font-size: 20px; margin-bottom: 4px; display: block; }
+        .nav-item.active { color: var(--primary); }
+        .nav-item.active i { transform: translateY(-3px); text-shadow: 0 0 10px var(--primary); }
 
-        /* المشغل الداخلي */
+        /* المشغل */
         .player-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 2000; display: none;
+            background: black; z-index: 2000; display: none;
             flex-direction: column; justify-content: center;
         }
         .player-modal.open { display: flex; }
-        .video-box { width: 100%; max-width: 800px; aspect-ratio: 16/9; background: #000; margin: 0 auto; position: relative; }
+        .video-box { width: 100%; max-width: 800px; aspect-ratio: 16/9; background: #000; margin: 0 auto; }
         video, iframe { width: 100%; height: 100%; border: none; }
-        
         .close-player {
             position: absolute; top: 20px; right: 20px;
-            padding: 8px 25px; background: linear-gradient(90deg, #FFD700, #32CD32);
-            border: none; color: #000; font-weight: bold; border-radius: 20px; cursor: pointer; z-index: 2005;
+            padding: 8px 20px; background: rgba(255,255,255,0.1); border: 1px solid white;
+            color: white; border-radius: 20px; cursor: pointer;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="brand-container">
-            <div class="brand-logo"><i class="fas fa-play"></i></div> 
-            <div class="brand-name">66 ZONE</div>
-        </div>
+        <div class="brand">66 LIVE</div>
         <a href="https://t.me/C9_9P" target="_blank" class="tg-btn"><i class="fab fa-telegram"></i></a>
     </header>
 
     <div id="tab-home" class="page active">
+        
         <div id="categories-container" class="categories-grid">
+            
             <div class="cat-card" onclick="showChannels('bein')">
                 <div class="cat-content">
                     <div class="cat-icon"><i class="fas fa-futbol"></i></div>
                     <div class="cat-text"><h3>BeIN Sports</h3><span>دوريات عالمية</span></div>
                 </div>
-                <i class="fas fa-chevron-left" style="color:#555"></i>
+                <i class="fas fa-chevron-left" style="color:#666"></i>
             </div>
+
             <div class="cat-card" onclick="showChannels('mbc')">
                 <div class="cat-content">
                     <div class="cat-icon"><i class="fas fa-film"></i></div>
                     <div class="cat-text"><h3>MBC Group</h3><span>أفلام ومسلسلات</span></div>
                 </div>
-                <i class="fas fa-chevron-left" style="color:#555"></i>
+                <i class="fas fa-chevron-left" style="color:#666"></i>
             </div>
+
             <div class="cat-card" onclick="showChannels('ssc')">
                 <div class="cat-content">
                     <div class="cat-icon"><i class="fas fa-running"></i></div>
                     <div class="cat-text"><h3>SSC Sports</h3><span>الدوري السعودي</span></div>
                 </div>
-                <i class="fas fa-chevron-left" style="color:#555"></i>
+                <i class="fas fa-chevron-left" style="color:#666"></i>
             </div>
+
             <div class="cat-card" onclick="showChannels('news')">
                 <div class="cat-content">
                     <div class="cat-icon"><i class="fas fa-newspaper"></i></div>
                     <div class="cat-text"><h3>أخبار</h3><span>الجزيرة والعربية</span></div>
                 </div>
-                <i class="fas fa-chevron-left" style="color:#555"></i>
+                <i class="fas fa-chevron-left" style="color:#666"></i>
             </div>
+
         </div>
 
         <div id="channels-container" style="display:none;">
@@ -196,15 +194,16 @@
             </div>
             <div id="channels-list" class="channels-grid"></div>
         </div>
+
     </div>
 
     <div id="tab-search" class="page">
-        <input type="text" class="search-box" placeholder="ابحث عن اسم القناة..." oninput="doSearch(this.value)">
+        <input type="text" class="search-box" placeholder="ابحث عن قناة..." oninput="doSearch(this.value)">
         <div id="search-results" class="channels-grid"></div>
     </div>
 
     <div id="tab-favorites" class="page">
-        <h3 style="text-align:center; color:#FFD700;">المفضلة ⭐</h3>
+        <h3 style="text-align:center; color:gold;">المفضلة ⭐</h3>
         <div id="fav-list" class="channels-grid"></div>
         <p id="no-fav" style="text-align:center; color:#777; margin-top:30px;">لا توجد قنوات مفضلة</p>
     </div>
@@ -224,79 +223,66 @@
     <div id="player" class="player-modal">
         <button class="close-player" onclick="closeVideo()">إغلاق X</button>
         <div class="video-box">
-            <video id="vid" controls playsinline style="display:none;"></video>
+            <video id="vid" controls style="display:none;"></video>
             <iframe id="web" allowfullscreen style="display:none;"></iframe>
         </div>
     </div>
 
     <script>
         // ============================
-        // قاعدة البيانات الكاملة للقنوات
+        // 1. قاعدة بيانات القنوات
         // ============================
         const DB = {
             'bein': [
-                { name: "BeIN Sports 1", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332929.ts", type: "stream" },
-                { name: "BeIN Sports 2", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332930.ts", type: "stream" },
-                { name: "BeIN Sports 3", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332931.ts", type: "stream" },
-                { name: "BeIN Sports 4", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332932.ts", type: "stream" },
-                { name: "BeIN Sports 5", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332933.ts", type: "stream" },
-                { name: "BeIN Sports 6", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332934.ts", type: "stream" },
-                { name: "BeIN Sports 7", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332935.ts", type: "stream" },
-                { name: "BeIN Sports 8", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332936.ts", type: "stream" },
-                { name: "BeIN Premium 1", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332927.ts", type: "stream" },
-                { name: "BeIN Premium 2", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332928.ts", type: "stream" },
-                { name: "BeIN Xtra 1", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332940.ts", type: "stream" },
-                { name: "BeIN Xtra 2", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332941.ts", type: "stream" },
-                { name: "BeIN News", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332926.ts", type: "stream" }
+                { name: "BeIN Sports 1", link: "http://62.210.245.19:8000/live/testapp/testapp/81.ts", type: "stream" },
+                { name: "BeIN Sports 2", link: "ضع_الرابط_هنا", type: "stream" },
+                { name: "BeIN Premium 1", link: "ضع_الرابط_هنا", type: "stream" },
             ],
             'mbc': [
-                { name: "MBC 1", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332616.ts", type: "stream" },
-                { name: "MBC 2", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332617.ts", type: "stream" },
-                { name: "MBC 3", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332618.ts", type: "stream" },
-                { name: "MBC 4", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332619.ts", type: "stream" },
-                { name: "MBC 5", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332620.ts", type: "stream" },
-                { name: "MBC Action", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332621.ts", type: "stream" },
-                { name: "MBC Bollywood", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332622.ts", type: "stream" },
-                { name: "MBC Drama", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332623.ts", type: "stream" },
-                { name: "MBC Max", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332624.ts", type: "stream" },
-                { name: "MBC Masr", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332625.ts", type: "stream" },
-                { name: "MBC Iraq", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332627.ts", type: "stream" }
+                { name: "MBC 1", link: "https://www.elahmad.com/tv/mobiletv/glarb.php?id=mbc1_tv_1", type: "iframe" },
+                { name: "MBC 2", link: "ضع_الرابط_هنا", type: "stream" },
+                { name: "MBC Action", link: "ضع_الرابط_هنا", type: "stream" },
             ],
             'ssc': [
-                { name: "SSC 1 HD", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332960.ts", type: "stream" },
-                { name: "SSC 2 HD", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332961.ts", type: "stream" },
-                { name: "SSC 3 HD", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332962.ts", type: "stream" },
-                { name: "SSC 4 HD", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332963.ts", type: "stream" },
-                { name: "SSC 5 HD", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332964.ts", type: "stream" },
-                { name: "SSC Extra 1", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332965.ts", type: "stream" },
-                { name: "SSC Extra 2", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332966.ts", type: "stream" }
+                { name: "SSC 1 HD", link: "ضع_الرابط_هنا", type: "stream" },
+                { name: "SSC 5 HD", link: "ضع_الرابط_هنا", type: "stream" },
             ],
             'news': [
-                { name: "Al Jazeera", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332560.ts", type: "stream" },
-                { name: "Al Jazeera Mubasher", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332561.ts", type: "stream" },
-                { name: "Al Arabiya", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332565.ts", type: "stream" },
-                { name: "Al Hadath", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332566.ts", type: "stream" },
-                { name: "Sky News Arabia", link: "http://ip96.uk:8080/live/Ghosia104/pathan104/332570.ts", type: "stream" }
+                { name: "Al Jazeera", link: "https://live-hls-web-aje.getaj.net/AJE/03.m3u8", type: "stream" },
+                { name: "Al Arabiya", link: "ضع_الرابط_هنا", type: "stream" },
             ]
         };
 
         // ============================
-        // المنطق البرمجي
+        // 2. البرمجة والتحكم
         // ============================
 
+        // --- التنقل السفلي ---
         function navTo(tabId, btn) {
+            // إخفاء كل الصفحات
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // إظهار الصفحة المطلوبة
             document.getElementById('tab-' + tabId).classList.add('active');
+            
+            // تحديث الأزرار
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             btn.classList.add('active');
+
             if(tabId === 'favorites') loadFavs();
         }
 
+        // --- التحكم بالأقسام ---
         function showChannels(catKey) {
             const list = DB[catKey];
             const container = document.getElementById('channels-list');
-            container.innerHTML = '';
-            if(list) { list.forEach(ch => container.innerHTML += makeCard(ch)); }
+            container.innerHTML = ''; // تنظيف
+
+            if(list) {
+                list.forEach(ch => {
+                    container.innerHTML += makeCard(ch);
+                });
+            }
+
             document.getElementById('categories-container').style.display = 'none';
             document.getElementById('channels-container').style.display = 'block';
             updateStars();
@@ -307,7 +293,9 @@
             document.getElementById('categories-container').style.display = 'grid';
         }
 
+        // --- إنشاء بطاقة القناة ---
         function makeCard(ch) {
+            // تشفير البيانات لتمريرها للدالة
             const dataStr = encodeURIComponent(JSON.stringify(ch));
             return `
             <div class="ch-card" onclick="playChannel('${ch.link}', '${ch.type}')">
@@ -317,23 +305,33 @@
             </div>`;
         }
 
+        // --- المفضلة ---
         function toggleFav(e, dataStr) {
-            e.stopPropagation();
+            e.stopPropagation(); // منع تشغيل الفيديو
             const ch = JSON.parse(decodeURIComponent(dataStr));
-            let favs = JSON.parse(localStorage.getItem('favs_zone')) || [];
+            let favs = JSON.parse(localStorage.getItem('my_favs')) || [];
+            
             const exists = favs.find(f => f.name === ch.name);
-            if(exists) { favs = favs.filter(f => f.name !== ch.name); } else { favs.push(ch); }
-            localStorage.setItem('favs_zone', JSON.stringify(favs));
+            if(exists) {
+                favs = favs.filter(f => f.name !== ch.name);
+            } else {
+                favs.push(ch);
+            }
+
+            localStorage.setItem('my_favs', JSON.stringify(favs));
             updateStars();
             if(document.getElementById('tab-favorites').classList.contains('active')) loadFavs();
         }
 
         function loadFavs() {
-            const favs = JSON.parse(localStorage.getItem('favs_zone')) || [];
+            const favs = JSON.parse(localStorage.getItem('my_favs')) || [];
             const container = document.getElementById('fav-list');
             const msg = document.getElementById('no-fav');
+            
             container.innerHTML = '';
-            if(favs.length === 0) { msg.style.display = 'block'; } else {
+            if(favs.length === 0) {
+                msg.style.display = 'block';
+            } else {
                 msg.style.display = 'none';
                 favs.forEach(ch => container.innerHTML += makeCard(ch));
                 updateStars();
@@ -341,7 +339,7 @@
         }
 
         function updateStars() {
-            const favs = JSON.parse(localStorage.getItem('favs_zone')) || [];
+            const favs = JSON.parse(localStorage.getItem('my_favs')) || [];
             document.querySelectorAll('.ch-card').forEach(card => {
                 const name = card.querySelector('.ch-name').innerText;
                 const star = card.querySelector('.fav-star');
@@ -350,35 +348,49 @@
             });
         }
 
+        // --- البحث ---
         function doSearch(val) {
             const container = document.getElementById('search-results');
             container.innerHTML = '';
             if(val.length < 2) return;
+
             const q = val.toLowerCase();
+            // البحث في كل قاعدة البيانات
             Object.values(DB).flat().forEach(ch => {
                 if(ch.name.toLowerCase().includes(q)) container.innerHTML += makeCard(ch);
             });
             updateStars();
         }
 
+        // --- المشغل ---
         const player = document.getElementById('player');
         const vid = document.getElementById('vid');
         const web = document.getElementById('web');
 
-        // دالة المشغل الداخلي
         function playChannel(url, type) {
             if(url.includes('ضع_الرابط')) { alert('الرابط غير متوفر'); return; }
             
-            // فتح المشغل
             player.classList.add('open');
-            
             if(type === 'iframe') {
                 vid.style.display = 'none'; vid.pause();
                 web.style.display = 'block'; web.src = url;
             } else {
                 web.style.display = 'none'; web.src = '';
                 vid.style.display = 'block';
-                
                 if(Hls.isSupported()) {
-                    const hls = new Hls();
-            
+                    const hls = new Hls(); hls.loadSource(url); hls.attachMedia(vid); hls.on(Hls.Events.MANIFEST_PARSED, () => vid.play());
+                } else if(vid.canPlayType('application/vnd.apple.mpegurl')) {
+                    vid.src = url; vid.play();
+                }
+            }
+        }
+
+        function closeVideo() {
+            player.classList.remove('open');
+            vid.pause(); vid.src = ''; web.src = '';
+        }
+
+    </script>
+</body>
+    </html>
+    
